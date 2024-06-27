@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/models/plant.dart';
-import 'package:test_drive/pages/detail/detail.dart';
+import 'package:garden_app/models/plant.dart';
+import 'package:garden_app/pages/detail/detail.dart';
 
 class PopularPlant extends StatelessWidget {
   PopularPlant({super.key});

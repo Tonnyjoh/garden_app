@@ -18,11 +18,12 @@ class HeaderSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Welcome,",
+                "My plants,",
                 style: TextStyle(
                   fontSize: 25,
                   color: Colors.white,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'CaviarDreams',
                 ),
               ),
               SizedBox(height: 5),
@@ -31,6 +32,8 @@ class HeaderSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 19,
                   color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'CaviarDreams',
                 ),
               ),
             ],

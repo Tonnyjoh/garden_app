@@ -1,11 +1,28 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_drive/pages/home/widgets/menu.dart';
-import 'package:test_drive/pages/home/widgets/header.dart';
+import 'package:garden_app/pages/home/widgets/menu.dart';
+import 'package:garden_app/pages/home/widgets/header.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    if (index != 1) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+    print("Tapped on item: $index");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +54,28 @@ class HomePage extends StatelessWidget {
             Column(
               children: [
                 const HeaderSection(),
-                const SizedBox(height: 100),
+                const SizedBox(height: 90),
                 MenuSection(),
               ],
             )
           ],
         ),
       ),
-      bottomNavigationBar: NavigationBar(),
+      bottomNavigationBar: _buildNavigationBar(),
     );
   }
 
-  Widget NavigationBar() {
+  Widget _buildNavigationBar() {
     return Container(
       color: const Color(0xfff6f8ff),
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 5,
-                blurRadius: 10),
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 10,
+            ),
           ],
         ),
         child: ClipRRect(
@@ -66,65 +84,40 @@ class HomePage extends StatelessWidget {
             topRight: Radius.circular(30),
           ),
           child: BottomNavigationBar(
-            selectedItemColor: const Color(0xFF5F67EA),
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            selectedItemColor: const Color.fromARGB(255, 95, 234, 121),
             selectedFontSize: 12,
             unselectedFontSize: 12,
             unselectedItemColor: Colors.grey.withOpacity(0.7),
             type: BottomNavigationBarType.fixed,
             items: [
-              const BottomNavigationBarItem(
-                label: 'home',
+              BottomNavigationBarItem(
+                label: 'Plants',
                 icon: Icon(
-                  Icons.home_rounded,
+                  CupertinoIcons.leaf_arrow_circlepath,
+                  size: 30,
+                  color: _selectedIndex == 0
+                      ? const Color.fromARGB(255, 95, 234, 121)
+                      : const Color.fromARGB(255, 0, 0, 0).withOpacity(0.7),
+                ),
+              ),
+              const BottomNavigationBarItem(
+                label: "",
+                icon: Icon(
+                  CupertinoIcons.add_circled_solid,
                   size: 50,
+                  color: Colors.black,
                 ),
               ),
               BottomNavigationBarItem(
-                label: "Application",
-                icon: Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.more_horiz_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: "Film",
-                icon: Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.play_arrow_rounded,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: "Book",
-                icon: Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.auto_stories_rounded,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
+                label: "Statistics",
+                icon: Icon(
+                  Icons.leaderboard_outlined,
+                  size: 30,
+                  color: _selectedIndex == 2
+                      ? const Color.fromARGB(255, 95, 234, 121)
+                      : const Color.fromARGB(255, 0, 0, 0).withOpacity(0.7),
                 ),
               ),
             ],

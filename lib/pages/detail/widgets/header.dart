@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/models/plant.dart';
+import 'package:garden_app/models/plant.dart';
 
 class HeaderSection extends StatelessWidget {
   final Plant plant;

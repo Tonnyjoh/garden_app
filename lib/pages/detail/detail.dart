@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/models/plant.dart';
-import 'package:test_drive/pages/detail/widgets/detail_sliver.dart';
-import 'package:test_drive/pages/detail/widgets/info.dart';
+import 'package:garden_app/models/plant.dart';
+import 'package:garden_app/pages/detail/widgets/detail_sliver.dart';
+import 'package:garden_app/pages/detail/widgets/info.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage(this.plant, {super.key});
