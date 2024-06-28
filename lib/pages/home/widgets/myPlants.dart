@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:garden_app/models/plant.dart';
 import 'package:garden_app/pages/detail/detail.dart';
 
-class PopularPlant extends StatelessWidget {
-  PopularPlant({super.key});
+class MyPlants extends StatelessWidget {
+  MyPlants({super.key});
 
   final List<Plant> plants = Plant.plants();
 

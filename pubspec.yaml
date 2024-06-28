@@ -37,7 +37,7 @@ dependencies:
   readmore: ^3.0.0
   syncfusion_flutter_gauges: ^20.1.55
   # plant_icons: ^0.0.3:
-  # font_awesome_flutter: ^10.1.0
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:
@@ -94,5 +94,6 @@ flutter:
         - asset: assets/fonts/CaviarDreams.ttf
         - asset: assets/fonts/Caviar_Dreams_Bold.ttf
           weight: 700
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

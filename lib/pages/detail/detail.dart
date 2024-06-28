@@ -13,6 +13,7 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
+          //tapany ambony amle detail
           SliverPersistentHeader(
             delegate: DetailSliverDelegate(
               plant: plant,
@@ -20,6 +21,7 @@ class DetailPage extends StatelessWidget {
               roundedContainerHeight: 30,
             ),
           ),
+          //tapany ambany amle detail
           SliverToBoxAdapter(
             child: PlantInfo(plant),
           )

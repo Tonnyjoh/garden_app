@@ -14,13 +14,13 @@ class DescriptionSection extends StatelessWidget {
       child: ReadMoreText(
         plant.description,
         trimLines: 2,
-        colorClickableText: const Color(0xFF5F67EA),
+        colorClickableText: Colors.green,
         trimMode: TrimMode.Line,
-        trimCollapsedText: 'Plus',
-        trimExpandedText: ' Réduire',
+        trimCollapsedText: 'More',
+        trimExpandedText: ' Less',
         style: TextStyle(
-          color: Colors.grey.withOpacity(0.7),
-          height: 1.5,
+          color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.7),
+          height: 2,
         ),
       ),
     );

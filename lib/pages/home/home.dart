@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:garden_app/pages/home/widgets/menu.dart';
 import 'package:garden_app/pages/home/widgets/header.dart';
 
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
               BottomNavigationBarItem(
                 label: 'Plants',
                 icon: Icon(
-                  CupertinoIcons.leaf_arrow_circlepath,
+                  FontAwesomeIcons.seedling,
                   size: 30,
                   color: _selectedIndex == 0
                       ? const Color.fromARGB(255, 95, 234, 121)
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage> {
               BottomNavigationBarItem(
                 label: "Statistics",
                 icon: Icon(
-                  Icons.leaderboard_outlined,
+                  Icons.leaderboard_rounded,
                   size: 30,
                   color: _selectedIndex == 2
                       ? const Color.fromARGB(255, 95, 234, 121)

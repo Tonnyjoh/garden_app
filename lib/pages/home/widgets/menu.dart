@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:garden_app/pages/home/widgets/newest.dart';
-import 'package:garden_app/pages/home/widgets/popular.dart';
+import 'package:garden_app/pages/home/widgets/explore.dart';
+import 'package:garden_app/pages/home/widgets/myPlants.dart';
 
 class MenuSection extends StatelessWidget {
   MenuSection({super.key});
@@ -44,25 +44,27 @@ class MenuSection extends StatelessWidget {
                   children: statistics.map(_buildStatisticItem).toList(),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               const Text(
                 'My plants',
                 style: TextStyle(
                   fontSize: 40,
                   fontFamily: 'CaviarDreams',
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 20),
-              PopularPlant(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              MyPlants(),
+              const SizedBox(height: 10),
               const Text(
                 'Explore',
                 style: TextStyle(
                   fontSize: 40,
                   fontFamily: 'CaviarDreams',
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               NewestPlant(),
             ],
           ),

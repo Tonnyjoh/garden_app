@@ -31,7 +31,7 @@ class DetailSliverDelegate extends SliverPersistentHeaderDelegate {
             onTap: () => Navigator.of(context).pop(),
             child: Container(
               margin: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top,
+                top: MediaQuery.of(context).padding.top + 20,
                 left: 25,
                 right: 25,
               ),
@@ -64,7 +64,7 @@ class DetailSliverDelegate extends SliverPersistentHeaderDelegate {
               alignment: Alignment.center,
               width: 60,
               height: 5,
-              color: const Color(0xFF5F67EA),
+              color: Colors.green,
             ),
           ),
         )
