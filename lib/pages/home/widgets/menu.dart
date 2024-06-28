@@ -5,7 +5,7 @@ import 'package:garden_app/pages/home/widgets/myPlants.dart';
 
 class MenuSection extends StatelessWidget {
   MenuSection({super.key});
-
+//avy amle valeur anle capteur
   final List<Map<String, dynamic>> statistics = const [
     {'title': 'Temp', 'value': 25, 'max': 50, 'unit': '°C'},
     {'title': 'Humidity', 'value': 80, 'max': 100, 'unit': '%'},

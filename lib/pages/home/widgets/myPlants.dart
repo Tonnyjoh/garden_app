@@ -4,7 +4,7 @@ import 'package:garden_app/pages/detail/detail.dart';
 
 class MyPlants extends StatelessWidget {
   MyPlants({super.key});
-
+  //liste des plantes actuelles
   final List<Plant> plants = Plant.plants();
 
   @override
