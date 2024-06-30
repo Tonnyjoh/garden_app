@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:garden_app/pages/home/widgets/explore.dart';
-import 'package:garden_app/pages/home/widgets/myPlants.dart';
+import 'package:gardenapp/pages/home/widgets/explore.dart';
+import 'package:gardenapp/pages/home/widgets/myPlants.dart';
 
 class MenuSection extends StatelessWidget {
   MenuSection({super.key});

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:garden_app/models/plant.dart';
-import 'package:garden_app/pages/home/widgets/add_page.dart';
-import 'package:garden_app/pages/home/widgets/menu.dart';
-import 'package:garden_app/pages/home/widgets/header.dart';
-import 'package:garden_app/pages/home/widgets/statistics_page.dart';
+// import 'package:gardenapp/models/plant.dart';
+import 'package:gardenapp/pages/home/widgets/add_page.dart';
+import 'package:gardenapp/pages/home/widgets/menu.dart';
+import 'package:gardenapp/pages/home/widgets/header.dart';
+import 'package:gardenapp/pages/home/widgets/statistics_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
