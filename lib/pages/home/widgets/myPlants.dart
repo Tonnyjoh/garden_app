@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:garden_app/models/plant.dart';
-import 'package:garden_app/pages/detail/detail.dart';
+import 'package:gardenapp/models/plant.dart';
+import 'package:gardenapp/pages/detail/detail.dart';
 
 class MyPlants extends StatelessWidget {
   MyPlants({super.key});

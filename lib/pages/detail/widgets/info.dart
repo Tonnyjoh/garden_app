@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:garden_app/models/plant.dart';
-import 'package:garden_app/pages/detail/widgets/description.dart';
-import 'package:garden_app/pages/detail/widgets/gallery.dart';
-import 'package:garden_app/pages/detail/widgets/header.dart';
-import 'package:garden_app/pages/detail/widgets/review.dart';
+import 'package:gardenapp/models/plant.dart';
+import 'package:gardenapp/pages/detail/widgets/description.dart';
+import 'package:gardenapp/pages/detail/widgets/gallery.dart';
+import 'package:gardenapp/pages/detail/widgets/header.dart';
+import 'package:gardenapp/pages/detail/widgets/review.dart';
 
 class PlantInfo extends StatelessWidget {
   final Plant plant;

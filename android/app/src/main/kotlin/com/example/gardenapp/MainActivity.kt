@@ -1,4 +1,4 @@
-package com.example.flutter.testdrive.garden_app
+package com.example.gardenapp
 
 import io.flutter.embedding.android.FlutterActivity
 

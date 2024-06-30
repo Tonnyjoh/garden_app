@@ -1,4 +1,4 @@
-# garden_app
+# gardenapp
 
 A new Flutter project.
 

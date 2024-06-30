@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:garden_app/models/plant.dart';
+import 'package:gardenapp/models/plant.dart';
 
 class AddPage extends StatelessWidget {
   const AddPage({super.key});
