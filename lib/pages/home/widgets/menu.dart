@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:gardenapp/pages/home/widgets/explore.dart';
-import 'package:gardenapp/pages/home/widgets/myPlants.dart';
+import 'package:gardenapp/pages/home/widgets/myplants.dart';
 
 class MenuSection extends StatelessWidget {
-  MenuSection({super.key});
+ const MenuSection({super.key});
 //avy amle valeur anle capteur
   final List<Map<String, dynamic>> statistics = const [
     {'title': 'Temp', 'value': 25, 'max': 50, 'unit': '°C'},
@@ -89,7 +89,7 @@ class MenuSection extends StatelessWidget {
       }
     }
 
-    return Container(
+    return SizedBox(
       width: 150,
       height: 150,
       child: Center(

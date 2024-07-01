@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gardenapp/models/plant.dart';
@@ -120,7 +119,7 @@ class NewestPlant extends StatelessWidget {
             ),
             child:const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children:  [
                 Text(
                   'Your new plant has been added',
                   style: TextStyle(color: Colors.white, fontSize: 16),
@@ -139,38 +138,5 @@ class NewestPlant extends StatelessWidget {
     });
   }
 
-  Widget _buildWaterIcon(double waterNeed) {
-    int filledDrops =
-    (waterNeed / 2).round(); // Assuming waterNeed is out of 10
-    int totalDrops = 5;
 
-    return Row(
-      children: List.generate(totalDrops, (index) {
-        return Icon(
-          FontAwesomeIcons.droplet,
-          color:
-          index < filledDrops ? Colors.blue : Colors.grey.withOpacity(0.5),
-          size: 20,
-        );
-      }),
-    );
-  }
-
-  Widget _buildTemperatureIcon(double temperatureNeed) {
-    int filledTemps =
-    (temperatureNeed / 10).round(); // Assuming temperatureNeed is out of 50
-    int totalTemps = 5;
-
-    return Row(
-      children: List.generate(totalTemps, (index) {
-        return Icon(
-          CupertinoIcons.thermometer,
-          color: index < filledTemps
-              ? Colors.orange
-              : Colors.grey.withOpacity(0.5),
-          size: 20,
-        );
-      }),
-    );
-  }
 }

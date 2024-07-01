@@ -4,7 +4,7 @@ import 'package:gardenapp/models/plant.dart';
 
 class GallerySection extends StatelessWidget {
   final Plant plant;
-  const GallerySection(this.plant, {Key? key}) : super(key: key);
+  const GallerySection(this.plant, {super.key});
 
   static TextStyle labelStyle = const TextStyle(
     fontSize: 15,

@@ -4,7 +4,7 @@ import 'package:gardenapp/models/plant.dart';
 
 class ReviewSection extends StatelessWidget {
   final Plant plant;
-  const ReviewSection(this.plant, {Key? key}) : super(key: key);
+  const ReviewSection(this.plant, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -77,10 +77,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Column(
+            const Column(
               children: [
-                const HeaderSection(),
-                const SizedBox(height: 90),
+                HeaderSection(),
+                SizedBox(height: 90),
                 MenuSection(),
               ],
             )
