@@ -126,6 +126,7 @@ class AddPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       print('Added plant with ID: ${plant.id}');
+                      _showCustomSnackBar(context, plant.name);
                       // Implémentez la logique d'ajout ici
                     },
                     style: ElevatedButton.styleFrom(
@@ -143,5 +144,48 @@ class AddPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showCustomSnackBar(BuildContext context, String plantName) {
+    final overlay = Overlay.of(context);
+    final snackBar = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50,
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '$plantName has been added',
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                const Icon(Icons.check, color: Colors.white),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(snackBar);
+    Future.delayed(const Duration(seconds: 3), () {
+      snackBar.remove();
+    });
   }
 }

@@ -29,8 +29,8 @@ class Plant {
     return [
       Plant(
         0,
-        'assets/images/ori1.jpg',
-        'assets/images/ori_logo.png',
+        'assets/images/tom1.jpg',
+        'assets/images/tomlogo.png',
         'Tomate et voatabia',
         'Fruit atao hoe legume',
         1, // besoin en eau
@@ -49,8 +49,8 @@ class Plant {
       ),
       Plant(
         1,
-        'assets/images/rl1.jpg',
-        'assets/images/rl_logo.png',
+        'assets/images/cact1.jpeg',
+        'assets/images/cactlogo.png',
         'Cactus',
         'Misy tsilo ee',
         0.1,

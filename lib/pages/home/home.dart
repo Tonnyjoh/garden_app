@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:gardenapp/models/plant.dart';
 import 'package:gardenapp/pages/home/widgets/add_page.dart';
+import 'package:gardenapp/pages/home/widgets/statistics_page.dart';
 import 'package:gardenapp/pages/home/widgets/menu.dart';
 import 'package:gardenapp/pages/home/widgets/header.dart';
-import 'package:gardenapp/pages/home/widgets/statistics_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,29 +17,36 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddPage()),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const StatisticsPage()),
-        );
-        break;
+    if (index == 0) {
+      setState(() {
+        _selectedIndex = 0;
+      });
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+      switch (index) {
+        case 1:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddPage()),
+          ).then((_) {
+            setState(() {
+              _selectedIndex = 0;
+            });
+          });
+          break;
+        case 2:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const StatisticsPage()),
+          ).then((_) {
+            setState(() {
+              _selectedIndex = 0;
+            });
+          });
+          break;
+      }
     }
   }
 
