@@ -14,15 +14,6 @@ class AddPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Plant'),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(25),
@@ -184,8 +175,9 @@ class AddPage extends StatelessWidget {
     );
 
     overlay.insert(snackBar);
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       snackBar.remove();
+      Navigator.of(context).pop();
     });
   }
 }

@@ -25,11 +25,12 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _selectedIndex = index;
       });
+
       switch (index) {
         case 1:
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddPage()),
+            MaterialPageRoute(builder: (context) => const AddPage(),fullscreenDialog: true,),
           ).then((_) {
             setState(() {
               _selectedIndex = 0;
