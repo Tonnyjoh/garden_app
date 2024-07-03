@@ -4,9 +4,9 @@ class Plant {
   String icon;
   String name;
   String type;
-  num waterNeed; // Renommé de score à waterNeed
-  num lightNeed; // Renommé de download à lightNeed
-  num temperatureNeed; // Renommé de review à temperatureNeed
+  num waterNeed;
+  num lightNeed;
+  num temperatureNeed;
   String description;
   List<String> images;
   List<String> notifications;

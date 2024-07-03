@@ -37,7 +37,7 @@ class DetailSliverDelegate extends SliverPersistentHeaderDelegate {
               ),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.black.withOpacity(0.5),
                 shape: BoxShape.circle,
               ),
               child: const Icon(

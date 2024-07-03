@@ -1,183 +1,83 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gardenapp/models/plant.dart';
+/*import 'package:multiselect/multiselect.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';*/
 
-class AddPage extends StatelessWidget {
+class AddPage extends StatefulWidget {
   const AddPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Exemple de données de plantes plus complètes
-    final List<Plant> plants = Plant.plants();
+  _AddPageState createState() => _AddPageState();
+}
 
+class _AddPageState extends State<AddPage> {
+  final nameController = TextEditingController();
+  List<String> categories = [];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Plant'),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(25),
-        child: ListView.builder(
-          itemCount: plants.length,
-          itemBuilder: (context, index) {
-            final plant = plants[index];
-            return Container(
-              padding: const EdgeInsets.all(15),
-              margin: const EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+                side: const BorderSide(color: Colors.white30, width: 1.5),
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              title: Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset(
-                      plant.icon,
-                      width: 60,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
+                  const Text('Name: '),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              plant.name,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.droplet,
-                              color: Colors.blue,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              'Water need: ${plant.waterNeed}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        Row(
-                          children: [
-                            const Icon(
-                              CupertinoIcons.thermometer,
-                              color: Colors.orange,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              'Temperature need: ${plant.temperatureNeed}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        Row(
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.info,
-                              color: Colors.grey,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                plant.type,
-                                style: const TextStyle(fontSize: 14),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      controller: nameController,
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      print('Added plant with ID: ${plant.id}');
-                      _showCustomSnackBar(context, plant.name);
-                      // Implémentez la logique d'ajout ici
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(10),
-                      backgroundColor: Colors.green, // couleur du bouton
-                      foregroundColor: Colors.white, // couleur de l'icône
-                    ),
-                    child: const Icon(Icons.add),
                   ),
                 ],
               ),
-            );
-          },
+            ),
+            const SizedBox(height: 20),
+
+          /*  DropDownMultiSelect(
+              onChanged: (List<String> x) {
+                setState(() {
+                  categories = x;
+                });
+              },
+              options: const [
+                'Action',
+                'Science-fition',
+                'Aventure',
+                'Comédie'
+              ],
+              selectedValues: categories,
+              whenEmpty: 'Catégorie',
+            ),*/
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+              onPressed: () {
+               /* FirebaseFirestore.instance.collection('Movies').add({
+                  'name': nameController.value.text,
+                  'year': yearController.value.text,
+                  'poster': posterController.value.text,
+                  'categories': categories,
+                  'likes': 0,
+                });
+               */ Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  void _showCustomSnackBar(BuildContext context, String plantName) {
-    final overlay = Overlay.of(context);
-    final snackBar = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 50,
-        left: 20,
-        right: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '$plantName has been added',
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                const Icon(Icons.check, color: Colors.white),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay.insert(snackBar);
-    Future.delayed(const Duration(seconds: 1), () {
-      snackBar.remove();
-      Navigator.of(context).pop();
-    });
   }
 }
