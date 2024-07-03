@@ -11,9 +11,12 @@ class HeaderSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(
         children: [
-          Image.asset(
-            plant.icon,
-            width: 80,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.asset(
+              plant.icon,
+              width: 80,
+            ),
           ),
           const SizedBox(width: 15),
           Column(

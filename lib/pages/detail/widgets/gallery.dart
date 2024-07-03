@@ -23,22 +23,19 @@ class GallerySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> statistics = [
       {
-        'icon': FontAwesomeIcons.droplet,
+        'icon': 'assets/images/goutte_deau.png',
         'value': '${plant.waterNeed} L/week',
         'label': 'Water',
-        'color': Colors.lightBlueAccent,
       },
       {
-        'icon': FontAwesomeIcons.temperatureHigh,
+        'icon': 'assets/images/chaud.png',
         'value': '${plant.temperatureNeed}°C',
         'label': 'Temperature',
-        'color': Colors.deepOrangeAccent,
       },
       {
-        'icon': FontAwesomeIcons.solidSun,
-        'value': '${plant.lightNeed} Lux',
+        'icon': 'assets/images/soleil.png',
+        'value': '${plant.lightNeed} hours',
         'label': 'Light',
-        'color': Colors.amber,
       },
     ];
 
@@ -74,10 +71,9 @@ class GallerySection extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FaIcon(
+          Image.asset(
             statistic['icon'],
-            size: 40,
-            color: statistic['color'],
+            width: 50,
           ),
           const SizedBox(height: 10),
           Text(
