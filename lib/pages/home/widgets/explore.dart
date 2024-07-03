@@ -120,7 +120,7 @@ class NewestPlant extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:  [
                 Text(
-                  'Your new plant has been added',
+                  'It\'s now the new plant in the greenhouse.',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 Icon(Icons.check, color: Colors.white),

@@ -17,7 +17,7 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Plant'),
+        title: const Text('Add new plant in your list'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -73,7 +73,7 @@ class _AddPageState extends State<AddPage> {
                 });
                */ Navigator.pop(context);
               },
-              child: const Text('Add'),
+              child: const Text('Replace the actual plant'),
             ),
           ],
         ),
