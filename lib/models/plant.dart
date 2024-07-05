@@ -8,7 +8,6 @@ class Plant {
   num lightNeed;
   num temperatureNeed;
   String description;
-  List<String> images;
   List<String> notifications;
 
   Plant(
@@ -21,7 +20,6 @@ class Plant {
     this.lightNeed, // Renommé
     this.temperatureNeed, // Renommé
     this.description,
-    this.images,
     this.notifications,
   );
 
@@ -36,12 +34,8 @@ class Plant {
         1, // besoin en eau
         10, // besoin en lumière
         24, // température idéale
-        "tomate et voatabia tomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabiatomate et voatabia",
-        [
-          'assets/images/ori2.jpg',
-          'assets/images/ori3.jpg',
-          'assets/images/ori4.jpg',
-        ],
+        "tomate et voatabia tomate et tomate etvoatabia",
+
         [
           'Water in 30 minutes',
           'Fertilize soil in 2 days',
@@ -57,12 +51,7 @@ class Plant {
         15,
         30,
         "Feno tsilo le izy...",
-        [
-          'assets/images/rl2.jpg',
-          'assets/images/rl3.jpg',
-          'assets/images/rl4.jpg',
-          'assets/images/rl5.jpg',
-        ],
+
         [
           'Water in 3 hour',
         ],
