@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gardenapp/models/plant.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewestPlant extends StatelessWidget {
@@ -22,7 +21,7 @@ class NewestPlant extends StatelessWidget {
         children: [
           _buildPlantsSection(context), // Passer le contexte ici
           const SizedBox(height: 20),
-          _buildCountriesSection(context), // Passer le contexte ici
+          /*_buildCountriesSection(context), */
         ],
       ),
     );
@@ -104,8 +103,9 @@ class NewestPlant extends StatelessWidget {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              print('Button pressed!'); // Vérifiez que ce message s'affiche
-                              _showCustomSnackBar(context, 'New plant added!'); // Passer le contexte ici
+                              print('pant ID: ${plant['id_plant']}'); // ID anle plant
+                              _showCustomSnackBar(context, 'Current plant has been replaced!');
+
                             },
                             icon: const Icon(Icons.add),
                             color: Colors.white,
@@ -181,7 +181,7 @@ class NewestPlant extends StatelessWidget {
   }
 
   void _showCustomSnackBar(BuildContext context, String message) {
-    final overlay = Overlay.of(context)!; // Utiliser ! pour indiquer que context ne peut pas être null à ce stade
+    final overlay = Overlay.of(context); // Utiliser ! pour indiquer que context ne peut pas être null à ce stade
     final snackBar = OverlayEntry(
       builder: (context) => Positioned(
         top: 50,
