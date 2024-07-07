@@ -26,7 +26,7 @@ class MenuSection extends StatelessWidget {
           .from('realtime_indicators')
           .stream(primaryKey: ['id_realtime_indicator'])
           .asBroadcastStream(),
-      initialData: [], // Données initiales vides ou par défaut
+      initialData:const [], // Données initiales vides ou par défaut
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(

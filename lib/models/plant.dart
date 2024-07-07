@@ -1,61 +1,53 @@
 class Plant {
-  num id;
-  String bgImage;
-  String icon;
-  String name;
-  String type;
-  num waterNeed;
-  num lightNeed;
-  num temperatureNeed;
-  String description;
-  List<String> notifications;
+  final int id;
+  final String name;
+  final String bgImage;
+  final String icon;
+  final String variety;
+  final String description;
+  final List<PlantIndicator> plantIndicators;
 
-  Plant(
-    this.id,
-    this.bgImage,
-    this.icon,
-    this.name,
-    this.type,
-    this.waterNeed, // Renommé
-    this.lightNeed, // Renommé
-    this.temperatureNeed, // Renommé
-    this.description,
-    this.notifications,
-  );
+  Plant({
+    required this.id,
+    required this.name,
+    required this.bgImage,
+    required this.icon,
+    required this.variety,
+    required this.description,
+    required this.plantIndicators,
+  });
 
-  static List<Plant> plants() {
-    return [
-      Plant(
-        0,
-        'assets/images/tom1.jpg',
-        'assets/images/tomlogo.png',
-        'Tomate et voatabia',
-        'Fruit atao hoe legume',
-        1, // besoin en eau
-        10, // besoin en lumière
-        24, // température idéale
-        "tomate et voatabia tomate et tomate etvoatabia",
+  factory Plant.fromMap(Map<String, dynamic> map) {
+    return Plant(
+      id: map['id_plant'],
+      name: map['name'],
+      bgImage: map['bg_image'],
+      icon: map['icon'],
+      variety: map['variety'],
+      description: map['description'],
+      plantIndicators: (map['plant_indicators'] as List)
+          .map((indicator) => PlantIndicator.fromMap(indicator))
+          .toList(),
+    );
+  }
+}
 
-        [
-          'Water in 30 minutes',
-          'Fertilize soil in 2 days',
-        ],
-      ),
-      Plant(
-        1,
-        'assets/images/cact1.jpeg',
-        'assets/images/cactlogo.png',
-        'Cactus',
-        'Misy tsilo ee',
-        0.1,
-        15,
-        30,
-        "Feno tsilo le izy...",
+class PlantIndicator {
+  final double tempMax;
+  final double tempMin;
+  final double waterNeed;
 
-        [
-          'Water in 3 hour',
-        ],
-      ),
-    ];
+  PlantIndicator({
+    required this.tempMax,
+    required this.tempMin,
+    required this.waterNeed,
+  });
+
+  factory PlantIndicator.fromMap(Map<String, dynamic> map) {
+    return PlantIndicator(
+      tempMax: map['temp_max'],
+      tempMin: map['temp_min'],
+      waterNeed: map['water_need'],
+    );
   }
 }

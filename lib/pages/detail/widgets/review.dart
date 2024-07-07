@@ -8,13 +8,13 @@ class ReviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int filledDrops =
-        (plant.waterNeed / 2).round(); // Assuming waterNeed is out of 10
-    int totalDrops = 5;
+    double waterNeed = plant.plantIndicators.first.waterNeed;
+    double tempMin = plant.plantIndicators.first.tempMin;
+    double tempMax = plant.plantIndicators.first.tempMax;
 
-    int filledTemps = (plant.temperatureNeed / 10)
-        .round(); // Assuming temperatureNeed is out of 50
-    int totalTemps = 5;
+    // Convertir en échelle de 0 à 5
+    int filledDrops = (waterNeed * 5).round(); // Assuming waterNeed is a value between 0 and 1
+    int totalDrops = 5;
 
     return Container(
       padding: const EdgeInsets.all(25),
@@ -58,18 +58,25 @@ class ReviewSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children: List.generate(totalTemps, (index) {
-                      return Icon(
+                    children: [
+                      const Icon(
                         CupertinoIcons.thermometer,
-                        color:
-                            index < filledTemps ? Colors.orange : Colors.grey,
+                        color: Colors.orange,
                         size: 20,
-                      );
-                    }),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        '${tempMin.toStringAsFixed(1)}°C - ${tempMax.toStringAsFixed(1)}°C',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
                   const Text(
-                    'Temp',
+                    'Ideal Temp Range',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.black87,
@@ -88,7 +95,7 @@ class ReviewSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
+          /*Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.grey.withOpacity(0.1),
@@ -119,7 +126,7 @@ class ReviewSection extends StatelessWidget {
                 );
               }).toList(),
             ),
-          ),
+          ),*/
         ],
       ),
     );

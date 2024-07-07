@@ -32,7 +32,7 @@ class HeaderSection extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                plant.type,
+                plant.variety,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 123, 123, 123),
