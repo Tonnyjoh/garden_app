@@ -3,7 +3,7 @@ import 'package:gardenapp/models/plant.dart';
 import 'package:gardenapp/pages/detail/widgets/detail_sliver.dart';
 import 'package:gardenapp/pages/detail/widgets/info.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:rxdart/rxdart.dart'; // Assurez-vous d'ajouter cette dépendance dans pubspec.yaml
+import 'package:rxdart/rxdart.dart';
 
 class DetailPage extends StatelessWidget {
   final int id;
@@ -29,6 +29,9 @@ class DetailPage extends StatelessWidget {
       plantStream,
       indicatorStream,
           (List<Map<String, dynamic>> plantList, List<Map<String, dynamic>> indicatorList) {
+        //print('Plant data: $plantList'); // Log plant data
+        //print('Indicator data: $indicatorList'); // Log indicator data
+
         if (plantList.isNotEmpty) {
           final plantData = plantList.first;
           final plantIndicators = indicatorList.map((indicatorData) {
@@ -36,14 +39,16 @@ class DetailPage extends StatelessWidget {
           }).toList();
 
           final plant = Plant(
-            id: plantData['id_plant'],
-            name: plantData['name'],
-            bgImage: plantData['bg_image'],
-            icon: plantData['icon'],
-            variety: plantData['variety'],
-            description: plantData['description'],
+            id: plantData['id_plant'] as int,
+            name: plantData['name'] as String,
+            bgImage: plantData['bg_image'] as String,
+            icon: plantData['icon'] as String,
+            variety: plantData['variety'] as String,
+            description: plantData['description'] as String,
             plantIndicators: plantIndicators,
           );
+
+          //print('Constructed plant: $plant'); // Log constructed plant
 
           return plant;
         } else {
@@ -68,6 +73,7 @@ class DetailPage extends StatelessWidget {
           );
         } else if (snapshot.hasData) {
           final Plant plant = snapshot.data!;
+          //print('Plant data in build: $plant'); // Log plant data in build
           return Scaffold(
             body: CustomScrollView(
               slivers: [

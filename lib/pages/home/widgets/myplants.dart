@@ -29,7 +29,7 @@ class MyPlants extends StatelessWidget {
           final List<dynamic> plantsData = snapshot.data as List<dynamic>? ?? [];
 
           if (plantsData.isEmpty) {
-            return Center(
+            return const Center(
               child: Text(
                 'No plants found. Add a plant to get started!',
                 style: TextStyle(fontSize: 18, color: Colors.grey),
@@ -47,8 +47,10 @@ class MyPlants extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
+                  print(plantsData[index]);
                   Navigator.of(context).push(
                     MaterialPageRoute(
+
                       builder: (context) => DetailPage(plantsData[index]['id_plant']),
                     ),
                   );
