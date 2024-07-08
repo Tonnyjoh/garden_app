@@ -4,10 +4,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class NewestPlant extends StatelessWidget {
   NewestPlant({super.key});
 
-  final _plants = Supabase.instance.client
+  // Liste des plantes déjà plantées en utilisant un stream pour les données en temps réel
+  final _plantsStream = Supabase.instance.client
       .from('plants')
-      .select()
-      .filter('id_house', 'is', 'null')
+      .stream(primaryKey: ['id_plant'])
       .limit(5);
 
   @override
@@ -24,15 +24,24 @@ class NewestPlant extends StatelessWidget {
   }
 
   Widget _buildPlantsSection(BuildContext context) {
-    return FutureBuilder(
-      future: _plants,
+    return StreamBuilder(
+      stream: _plantsStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          final List<dynamic> plantsData = snapshot.data as List<dynamic>;
+          final List<dynamic> plantsData = snapshot.data as List<dynamic>? ?? [];
+
+          if (plantsData.isEmpty) {
+            return const Center(
+              child: Text(
+                'No plants found. Add a plant to get started!',
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            );
+          }
 
           return Column(
             children: plantsData

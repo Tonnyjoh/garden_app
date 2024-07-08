@@ -3,6 +3,7 @@ import 'package:gardenapp/models/plant.dart';
 import 'package:gardenapp/pages/detail/widgets/detail_sliver.dart';
 import 'package:gardenapp/pages/detail/widgets/info.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:rxdart/rxdart.dart'; // Assurez-vous d'ajouter cette dépendance dans pubspec.yaml
 
 class DetailPage extends StatelessWidget {
   final int id;
@@ -10,24 +11,52 @@ class DetailPage extends StatelessWidget {
 
   DetailPage(this.id, {super.key});
 
-  Future<Plant?> fetchData(int id) async {
-    final response = await supabase
+  Stream<Plant?> fetchPlantStream(int id) {
+    // Stream for the plants table
+    Stream<List<Map<String, dynamic>>> plantStream = supabase
         .from('plants')
-        .select('id_plant, name, bg_image, icon, variety, description, plant_indicators(water_need, temp_max, temp_min)')
-        .eq('id_plant', id)
-        .single();
+        .stream(primaryKey: ['id_plant'])
+        .eq('id_plant', id);
 
-    if (response.isEmpty) {
-      throw Exception('No data found');
-    } else {
-      return Plant.fromMap(response);
-    }
+    // Stream for the plant_indicators table
+    Stream<List<Map<String, dynamic>>> indicatorStream = supabase
+        .from('plant_indicators')
+        .stream(primaryKey: ['id_indicator'])
+        .eq('id_plant', id);
+
+    // Combine the two streams and map them to a Plant object
+    return CombineLatestStream.combine2(
+      plantStream,
+      indicatorStream,
+          (List<Map<String, dynamic>> plantList, List<Map<String, dynamic>> indicatorList) {
+        if (plantList.isNotEmpty) {
+          final plantData = plantList.first;
+          final plantIndicators = indicatorList.map((indicatorData) {
+            return PlantIndicator.fromMap(indicatorData);
+          }).toList();
+
+          final plant = Plant(
+            id: plantData['id_plant'],
+            name: plantData['name'],
+            bgImage: plantData['bg_image'],
+            icon: plantData['icon'],
+            variety: plantData['variety'],
+            description: plantData['description'],
+            plantIndicators: plantIndicators,
+          );
+
+          return plant;
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Plant?>(
-      future: fetchData(id),
+    return StreamBuilder<Plant?>(
+      stream: fetchPlantStream(id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

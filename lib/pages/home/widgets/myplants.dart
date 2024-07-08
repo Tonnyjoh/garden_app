@@ -5,17 +5,17 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class MyPlants extends StatelessWidget {
   MyPlants({super.key});
 
-  // Liste des plantes déjà plantées
-  final _plants = Supabase.instance.client
+  // Liste des plantes déjà plantées en utilisant un stream pour les données en temps réel
+  final _plantsStream = Supabase.instance.client
       .from('plants')
-      .select('id_plant,name,bg_image,plant_indicators(water_need,temp_max,temp_min)')
-      .match({'id_house': 2})
+      .stream(primaryKey: ['id_plant'])
+      .eq('id_house', 2)
       .order('id_plant', ascending: true);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _plants,
+    return StreamBuilder(
+      stream: _plantsStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
