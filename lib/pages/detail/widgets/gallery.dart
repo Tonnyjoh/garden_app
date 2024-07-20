@@ -20,20 +20,21 @@ class GallerySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final List<Map<String, dynamic>> statistics = [
       {
         'icon': 'assets/images/goutte_deau.png',
-        'value': '${plant.waterNeed} L/week',
+        'value': '${plant.plantIndicators.first.waterNeed} L/Day',
         'label': 'Water',
       },
       {
         'icon': 'assets/images/chaud.png',
-        'value': '${plant.temperatureNeed}°C',
+        'value': '${plant.plantIndicators.first.tempMin}-${plant.plantIndicators.first.tempMax}°C',
         'label': 'Temperature',
       },
       {
         'icon': 'assets/images/soleil.png',
-        'value': '${plant.lightNeed} hours',
+        'value': '${plant.plantIndicators.first.tempMin} hours',
         'label': 'Light',
       },
     ];
