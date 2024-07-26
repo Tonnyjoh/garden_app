@@ -34,7 +34,7 @@ class HeaderSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                     Text(
-                    "My plants,",
+                    "My plant,",
                     style: TextStyle(
                       fontSize: 23,
                       color: Colors.white,

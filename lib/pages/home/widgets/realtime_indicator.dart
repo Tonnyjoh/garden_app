@@ -3,7 +3,7 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class IndicatorWidget extends StatelessWidget {
-  const IndicatorWidget({Key? key}) : super(key: key);
+  const IndicatorWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class IndicatorWidget extends StatelessWidget {
           .from('realtime_indicators')
           .stream(primaryKey: ['id_realtime_indicator'])
           .asBroadcastStream(),
-      initialData: [], // Données initiales vides ou par défaut
+      initialData:const [],
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(

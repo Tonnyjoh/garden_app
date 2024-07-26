@@ -5,7 +5,7 @@ import 'explore.dart';
 import 'myplants.dart';
 
 class MenuSection extends StatelessWidget {
-  const MenuSection({Key? key}) : super(key: key);
+  const MenuSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class MenuSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              MyPlants(), // Utilisation de MyPlants comme avant
+              MyPlants(),
               const SizedBox(height: 10),
               const Text(
                 'Explore',
