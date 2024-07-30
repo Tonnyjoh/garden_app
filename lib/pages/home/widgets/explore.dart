@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class NewestPlant extends StatelessWidget {
-  NewestPlant({super.key});
+class Explore extends StatelessWidget {
+  Explore({super.key});
 
-  // Liste des plantes déjà plantées en utilisant un stream pour les données en temps réel
   final _plantsStream = Supabase.instance.client
       .from('plants')
       .stream(primaryKey: ['id_plant'])
-      .limit(5);
+      .limit(5)
+      .order('id_plant', ascending: false)
+      .map((event) => event.map((e) => e as Map<String, dynamic>).toList());
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class NewestPlant extends StatelessWidget {
   }
 
   Widget _buildPlantsSection(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<List<Map<String, dynamic>>>(
       stream: _plantsStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -32,7 +33,7 @@ class NewestPlant extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          final List<dynamic> plantsData = snapshot.data as List<dynamic>? ?? [];
+          final List<Map<String, dynamic>> plantsData = snapshot.data ?? [];
 
           if (plantsData.isEmpty) {
             return const Center(
@@ -44,9 +45,8 @@ class NewestPlant extends StatelessWidget {
           }
 
           return Column(
-            children: plantsData
-                .map(
-                  (plant) => Container(
+            children: plantsData.map((plant) {
+              return Container(
                 padding: const EdgeInsets.all(15),
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
@@ -70,7 +70,7 @@ class NewestPlant extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Image.asset(
-                            plant['icon'],
+                            plant['icon'] ?? 'assets/default_image.png',
                             width: 60,
                           ),
                         ),
@@ -80,7 +80,7 @@ class NewestPlant extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                plant['name'],
+                                plant['name'] ?? 'Unknown',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class NewestPlant extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                plant['variety'],
+                                plant['variety'] ?? 'Unknown',
                                 style: TextStyle(
                                   color: Colors.grey.withOpacity(0.8),
                                 ),
@@ -118,16 +118,15 @@ class NewestPlant extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            )
-                .toList(),
+              );
+            }).toList(),
           );
         }
       },
     );
   }
 
-  void _showConfirmationDialog(BuildContext context, dynamic plant) {
+  void _showConfirmationDialog(BuildContext context, Map<String, dynamic> plant) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -137,14 +136,14 @@ class NewestPlant extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Fermer la boîte de dialogue
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Fermer la boîte de dialogue
-                _addPlant(context, plant); // Ajouter la plante
+                Navigator.of(context).pop();
+                _addPlant(plant);
               },
               child: const Text('Add'),
             ),
@@ -154,66 +153,46 @@ class NewestPlant extends StatelessWidget {
     );
   }
 
-  void _addPlant(BuildContext context, dynamic plant) async {
+  Future<void> _addPlant(Map<String, dynamic> plant) async {
     try {
       await _updatePlant(plant['id_plant']);
-      _showCustomSnackBar(context, 'Plant has been successfully updated!');
     } catch (error) {
-      _showCustomSnackBar(context, 'Failed to update plant: $error');
+      // Handle errors if necessary
     }
   }
 
   Future<void> _updatePlant(int plantId) async {
-    final response = await Supabase.instance.client
-        .from('plants')
-        .update({'id_house': 2}) // Mise à jour de l'id_house
-        .eq('id_plant', plantId);
+    try {
+      // Fetch current plant in the house
+      final response = await Supabase.instance.client
+          .from('plants')
+          .select('id_plant')
+          .eq('id_house', 2);
 
-    if (response.error != null) {
-      throw response.error!.message;
+      if (response== null || response.isEmpty) {
+        return;
+      }
+
+      final actualPlantId = response[0]['id_plant'];
+
+      // Remove the current plant from the house
+      await Supabase.instance.client
+          .from('plants')
+          .update({'id_house': 0})
+          .eq('id_plant', actualPlantId);
+
+      // Add the new plant to the house
+      final updateResponse = await Supabase.instance.client
+          .from('plants')
+          .update({'id_house': 2})
+          .eq('id_plant', plantId);
+
+      if (updateResponse.error != null) {
+        throw updateResponse.error!.message;
+      }
+    } catch (error) {
+      // Handle errors if necessary
+      throw Exception('Failed to update plant: $error');
     }
-  }
-
-  void _showCustomSnackBar(BuildContext context, String message) {
-    final overlay = Overlay.of(context);
-    final snackBar = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 50,
-        left: 20,
-        right: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  message,
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                ),
-                const Icon(Icons.check, color: Colors.white),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay.insert(snackBar);
-    Future.delayed(const Duration(seconds: 3), () {
-      snackBar.remove();
-    });
   }
 }

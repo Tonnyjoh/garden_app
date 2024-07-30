@@ -45,7 +45,7 @@ class MenuSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              NewestPlant(), // Utilisation de NewestPlant comme avant
+              Explore(), // Utilisation de NewestPlant comme avant
             ],
           ),
         ),
