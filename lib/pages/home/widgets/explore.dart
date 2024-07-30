@@ -9,7 +9,7 @@ class Explore extends StatelessWidget {
       .stream(primaryKey: ['id_plant'])
       .limit(5)
       .order('id_plant', ascending: false)
-      .map((event) => event.map((e) => e as Map<String, dynamic>).toList());
+      .map((event) => event.map((e) => e).toList());
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class Explore extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Image.asset(
-                            plant['icon'] ?? 'assets/default_image.png',
+                            plant['icon'],
                             width: 60,
                           ),
                         ),
@@ -80,7 +80,7 @@ class Explore extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                plant['name'] ?? 'Unknown',
+                                plant['name'],
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class Explore extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                plant['variety'] ?? 'Unknown',
+                                plant['variety'],
                                 style: TextStyle(
                                   color: Colors.grey.withOpacity(0.8),
                                 ),
@@ -126,7 +126,7 @@ class Explore extends StatelessWidget {
     );
   }
 
-  void _showConfirmationDialog(BuildContext context, Map<String, dynamic> plant) {
+  void _showConfirmationDialog(BuildContext context, dynamic plant) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -149,11 +149,12 @@ class Explore extends StatelessWidget {
             ),
           ],
         );
-      },
+      },  // Liste des plantes déjà plantées en utilisant un stream pour les données en temps réel
+
     );
   }
 
-  Future<void> _addPlant(Map<String, dynamic> plant) async {
+  Future<void> _addPlant(dynamic plant) async {
     try {
       await _updatePlant(plant['id_plant']);
     } catch (error) {
@@ -163,25 +164,22 @@ class Explore extends StatelessWidget {
 
   Future<void> _updatePlant(int plantId) async {
     try {
-      // Fetch current plant in the house
       final response = await Supabase.instance.client
           .from('plants')
           .select('id_plant')
           .eq('id_house', 2);
 
-      if (response== null || response.isEmpty) {
+      if (response.isEmpty) {
         return;
       }
 
-      final actualPlantId = response[0]['id_plant'];
+      final actualPlantId = response.first['id_plant'];
 
-      // Remove the current plant from the house
       await Supabase.instance.client
           .from('plants')
           .update({'id_house': 0})
           .eq('id_plant', actualPlantId);
 
-      // Add the new plant to the house
       final updateResponse = await Supabase.instance.client
           .from('plants')
           .update({'id_house': 2})
