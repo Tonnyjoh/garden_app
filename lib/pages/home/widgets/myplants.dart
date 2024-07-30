@@ -1,138 +1,110 @@
 import 'package:flutter/material.dart';
-import 'package:gardenapp/pages/detail/detail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:gardenapp/pages/detail/detail.dart';
 
 class MyPlants extends StatelessWidget {
-  MyPlants({super.key});
-
-  final _plantsStream = Supabase.instance.client
-      .from('plants')
-      .stream(primaryKey: ['id_plant'])
-      .eq('id_house', 2);
+  const MyPlants({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: _plantsStream,
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: Supabase.instance.client
+          .from('plants')
+          .stream(primaryKey: ['id_plant'])
+          .asBroadcastStream(),
+      initialData: const [],
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        }
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        } else {
-          final List<dynamic> plantsData = snapshot.data as List<dynamic>? ?? [];
+        }
 
-          if (plantsData.isEmpty) {
-            return const Center(
-              child: Text(
-                'No plants found. Add a plant to get started!',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
-              ),
-            );
-          }
+        final List<Map<String, dynamic>> plantsData = snapshot.data ?? [];
 
-          final plant = plantsData.first;
+        final List<Map<String, dynamic>> filteredPlants = plantsData
+            .where((plant) => plant['id_house'] == 2)
+            .toList();
 
-          return Center(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              /*width: MediaQuery.of(context).size.width * 0.9,*/
-              width: 250,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-                gradient: LinearGradient(
-                  colors: [Colors.white, Colors.white.withOpacity(0.9)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Hero(
-                      tag: plant['name'],
-                      child: Image.asset(
-                        plant['bg_image'],
-                        fit: BoxFit.cover,
-                        width: 150,
-                        height: 150,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 32,
-                    height: 32,
-
-                    decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_forward_ios, color: Colors.green, size: 16),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DetailPage(plant['id_plant']),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+        if (filteredPlants.isEmpty) {
+          return const Center(
+            child: Text(
+              'No plants found. Add a plant to get started!',
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
           );
         }
+
+        return Center(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: Row(
+              key: ValueKey(filteredPlants.length),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: filteredPlants.map((plant) => _buildPlantItem(context, plant)).toList(),
+            ),
+          ),
+        );
       },
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String status, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Icon(icon, size: 16, color: Colors.blue),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black.withOpacity(0.6),
-            ),
+  Widget _buildPlantItem(BuildContext context, Map<String, dynamic> plant) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DetailPage(plant['id_plant']),
           ),
-          const Spacer(),
-          /*Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.yellow,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(
-              status,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.white,
+        );
+      },
+      child: SizedBox(
+        width: 200,
+        height: 180,
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius:const BorderRadius.vertical(top: Radius.circular(15)),
+                  child: Image.asset(
+                    plant['bg_image'],
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
-          ),*/
-        ],
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration:const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:  BorderRadius.vertical(bottom: Radius.circular(15)),
+                ),
+                child: Text(
+                  plant['name'],
+                  style: const TextStyle(
+                    color: Colors.green,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
