@@ -12,8 +12,7 @@ class ReviewSection extends StatelessWidget {
     double tempMin = plant.plantIndicators.first.tempMin;
     double tempMax = plant.plantIndicators.first.tempMax;
 
-    // Convertir en échelle de 0 à 5
-    int filledDrops = (waterNeed * 5).round(); // Assuming waterNeed is a value between 0 and 1
+    int filledDrops = waterNeed as int;
     int totalDrops = 5;
 
     return Container(

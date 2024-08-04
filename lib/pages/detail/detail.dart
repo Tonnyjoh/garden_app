@@ -83,10 +83,12 @@ class DetailPage extends StatelessWidget {
                     plant: plant,
                     expandedHeight: 360,
                     roundedContainerHeight: 30,
+
                   ),
                 ),
                 // Bottom part of the detail page
                 SliverToBoxAdapter(
+
                   child: PlantInfo(plant),
                 ),
               ],
