@@ -24,7 +24,7 @@ class GallerySection extends StatelessWidget {
     final List<Map<String, dynamic>> statistics = [
       {
         'icon': 'assets/images/goutte_deau.png',
-        'value': '${plant.plantIndicators.first.waterNeed} L/Day',
+        'value': '${plant.plantIndicators.first.waterNeed} L',
         'label': 'Water',
       },
       {

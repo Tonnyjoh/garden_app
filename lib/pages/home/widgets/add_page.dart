@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -28,6 +29,8 @@ class _AddPageState extends State<AddPage> {
       apiKey: 'AIzaSyDP05oAHevBU4iWKt5DZiMrM6nIhmcdyq4',
       generationConfig: generationConfig,
     );
+    // Add a welcome message
+    chatHistory.add({'text': 'If you want to add plant, type "add: your_plant"', 'source': 'AI'});
   }
 
   void addBotMessage(String message) {
@@ -35,88 +38,119 @@ class _AddPageState extends State<AddPage> {
   }
 
   Future<void> sendMessage(String message) async {
-    final content = Content.text(message);
+    if(message.isNotEmpty){
+      final content = Content.text(message);
+      setState(() {
+        chatHistory.add({'text': message, 'source': 'User'});
+        chatHistory.add({'text': '', 'source': 'AI'});
+        isStreaming = true;
+      });
 
-    setState(() {
-      chatHistory.add({'text': message, 'source': 'User'});
-      chatHistory.add({'text': '...', 'source': 'AI'});
-      isStreaming = true;
-    });
+      String responseText;
 
-    String responseText;
+      try {
+        if (message.startsWith('add:')) {
+          final plantName = message.substring(4).trim();
+          final prompt = '''
+        I need detailed information about the plant "$plantName". 
+        Please provide the following details in JSON format:
+        {
+          "name": "Name of the Plant",
+          "variety": "fruit or vegetable, choose between",
+          "description": "Description of the Plant",
+          "temp_max": "Maximum Ideal Temperature in general",
+          "temp_min": "Minimum Ideal Temperature in general",
+          "water_need": "Water Needs, choose between these in general"
+        }
+        Example:
+        {
+          "name": "Tomato",
+          "variety": "Fruit",
+          "description": "Medium-sized, round red fruit with a slightly tangy flavor.",
+          "temp_max": 25,
+          "temp_min": 16,
+          "water_need": "Moderate|Low|Regular|Minimal"
+        } 
+        or 
+        {
+          "name": "Oignon",
+          "variety": "Vegetable",
+          "description": "The onion is a bulb vegetable, characterized by its pungent taste and layered bulb. It is commonly used in cooking around the world, adding flavor to both raw and cooked dishes.",
+          "temp_max": "25",
+          "temp_min": "13",
+          "water_need": "Moderate"
+        }
+        or
+        {"name":"Rose","variety":"flower","description":"Roses are perennial flowering shrubs known for their beautiful and fragrant flowers. They come in a wide variety of colors, shapes, and sizes, and are popular for gardens, bouquets, and as symbols of love and beauty.","temp_max":"27","temp_min":"7","water_need":"3"}
+        If you cannot find specific information, state 'Information not available'.
+        ''';
 
-    if (message.startsWith('add:')) {
-      final plantName = message.substring(4).trim();
-      final prompt = '''
-      I need detailed information about the plant "$plantName". 
-      Please provide the following details in JSON format:
-      {
-        "name": "Name of the Plant",
-        "variety": "fruit or vegetable, choose between",
-        "description": "Description of the Plant",
-        "temp_max": "Maximum Ideal Temperature in general",
-        "temp_min": "Minimum Ideal Temperature in general",
-        "water_need": "Water Needs, choose between these in general"
+          final response = model.generateContentStream([Content.text(prompt)]);
+          String accumulatedResponse = '';
+          await for (final chunk in response) {
+            accumulatedResponse += chunk.text ?? '';
+            setState(() {
+              chatHistory.last['text'] = '$accumulatedResponse...';
+            });
+          }
+
+          responseText = formatResponseAsJson(accumulatedResponse);
+          try {
+            final plantData = jsonDecode(responseText) as Map<String, dynamic>;
+            await insertPlantData(plantData);
+          } catch (e) {
+            print('Erreur lors de l\'insertion des données de la plante: $e');
+          }
+        } else {
+          final response = model.generateContentStream([content]);
+          String accumulatedResponse = '';
+          await for (final chunk in response) {
+            accumulatedResponse += chunk.text ?? '';
+            setState(() {
+              chatHistory.last['text'] = '$accumulatedResponse...';
+            });
+          }
+          responseText = accumulatedResponse;
+        }
+      } catch (e) {
+        print('Erreur lors de la génération de contenu: $e');
+        responseText = 'Désolé, une erreur est survenue. Veuillez réessayer.';
       }
-      Example:
-      {
-        "name": "Tomato",
-        "variety": "Fruit",
-        "description": "Medium-sized, round red fruit with a slightly tangy flavor.",
-        "temp_max": 25,
-        "temp_min": 16,
-        "water_need": "Moderate|Low|Regular|Minimal"
-      } 
-      or ```json
-      {
-        "name": "Oignon",
-        "variety": "Vegetable",
-        "description": "The onion is a bulb vegetable, characterized by its pungent taste and layered bulb. It is commonly used in cooking around the world, adding flavor to both raw and cooked dishes.",
-        "temp_max": "25",
-        "temp_min": "13",
-        "water_need": "Moderate"
-      }
-      ```
-      If you cannot find specific information, state 'Information not available'.
-      ''';
 
-      final response = model.generateContentStream([Content.text(prompt)]);
-      String accumulatedResponse = '';
-      await for (final chunk in response) {
-        accumulatedResponse += chunk.text ?? '';
-        setState(() {
-          chatHistory.last['text'] = '$accumulatedResponse...';
-        });
-      }
-
-      //print('AI Response: $accumulatedResponse');
-
-      responseText = formatResponseAsJson(accumulatedResponse);
-    } else {
-      final response = model.generateContentStream([content]);
-      String accumulatedResponse = '';
-      await for (final chunk in response) {
-        accumulatedResponse += chunk.text ?? '';
-        setState(() {
-          chatHistory.last['text'] = '$accumulatedResponse...';
-        });
-      }
-      responseText = accumulatedResponse;
+      setState(() {
+        chatHistory.last['text'] = responseText;
+        isStreaming = false;
+      });
     }
+  }
 
-    setState(() {
-      chatHistory.last['text'] = responseText;
-      isStreaming = false;
-    });
+  Future<void> insertPlantData(Map<String, dynamic> plantData) async {
+    final supabase = Supabase.instance.client;
+    final plantResponse = await supabase.from('plants').insert({
+      'name': plantData['name'],
+      'variety': plantData['variety'],
+      'description': plantData['description'],
+    }).select();
+
+    if (plantResponse.isNotEmpty) {
+      final plantId = plantResponse.first['id_plant'];
+
+      await supabase.from('plant_indicators').insert({
+        'id_plant': plantId,
+        'temp_max': plantData['temp_max'],
+        'temp_min': plantData['temp_min'],
+        'water_need': plantData['water_need'],
+      });
+    }
   }
 
   String formatResponseAsJson(String response) {
-    String cleanedResponse = response.replaceAll(RegExp(r'```|json'), '').trim();
+    String cleanedResponse =
+    response.replaceAll(RegExp(r'```|json'), '').trim();
 
     try {
       final jsonResponse = jsonDecode(cleanedResponse) as Map<String, dynamic>;
 
-      // Clean and map the response fields
       final plantInfo = {
         'name': jsonResponse['name'] ?? 'Unknown',
         'variety': simplifyVariety(jsonResponse['variety']) ?? 'Unknown',
@@ -128,7 +162,7 @@ class _AddPageState extends State<AddPage> {
 
       return jsonEncode(plantInfo);
     } catch (e) {
-      print('Error parsing JSON response: $e');
+      print('Erreur lors de la conversion JSON: $e');
       return jsonEncode({
         'name': 'Unknown',
         'variety': 'Unknown',
@@ -141,9 +175,14 @@ class _AddPageState extends State<AddPage> {
   }
 
   String simplifyVariety(String? variety) {
-    // Simplify variety to 'Fruit' or 'Vegetable'
     if (variety == null) return 'Unknown';
-    return variety.contains('Vegetable') ? 'Vegetable' : 'Fruit';
+    if (variety.contains('Vegetable')) {
+      return 'Vegetable';
+    } else if (variety.contains('Fruit')) {
+      return 'Fruit';
+    } else {
+      return 'Flower';
+    }
   }
 
   String formatTemperature(dynamic temperature) {
@@ -152,7 +191,6 @@ class _AddPageState extends State<AddPage> {
   }
 
   String convertWaterNeed(String? waterNeed) {
-
     if (waterNeed == null) return 'Unknown';
 
     // Simplified scale from 0 to 5
@@ -163,17 +201,75 @@ class _AddPageState extends State<AddPage> {
     return '0';
   }
 
+  Widget buildMessage(Map<String, String> message) {
+    final isUser = message['source'] == 'User';
+    final bgColor = isUser ? Colors.blue[50] : Colors.grey[200];
+    final textColor = isUser ? Colors.black : Colors.blue;
+    final avatar = isUser
+        ? CircleAvatar(
+      child: Image.asset(
+        'assets/images/avatar.png',
+        fit: BoxFit.cover,
+      ),
+    )
+        : CircleAvatar(
+      child: Image.asset(
+        'assets/images/chatbot.png',
+        fit: BoxFit.cover,
+      ),
+    );
+
+    return Align(
+      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Container(
+          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 2,
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: avatar,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    message['text'] ?? '',
+                    style: TextStyle(color: textColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat with mIAly'),
+        title: const Text('Chat with your friend'),
       ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              reverse: true, // Start from bottom
+              reverse: true,
               child: Column(
                 children: [
                   ListView.builder(
@@ -181,85 +277,39 @@ class _AddPageState extends State<AddPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: chatHistory.length,
                     itemBuilder: (context, index) {
-                      final message = chatHistory[index];
-                      final isUser = message['source'] == 'User';
-                      final bgColor = isUser ? Colors.blue[50] : Colors.grey[200];
-                      final textColor = isUser ? Colors.black : Colors.blue;
-                      final icon = isUser ? Icons.person : Icons.chat_bubble_outline_rounded;
-
-                      return Align(
-                        alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                          child: Container(
-                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
-                            decoration: BoxDecoration(
-                              color: bgColor,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 1,
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 1), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.all(12),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(icon, color: textColor, size: 20),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    message['text']!,
-                                    style: TextStyle(color: textColor),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
+                      return buildMessage(chatHistory[index]);
                     },
                   ),
-                  const SizedBox(height: 80), // Spacer for extra space at the bottom
+                  if(isStreaming) const LinearProgressIndicator(
+                    backgroundColor: Colors.blue,
+                    color: Colors.grey,
+                  )
                 ],
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: promptController,
-                    textInputAction: TextInputAction.send,
-                    onSubmitted: (value) {
-                      if (value.isNotEmpty && !isStreaming) {
-                        sendMessage(value);
-                        promptController.clear();
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Type your message...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.send),
-                        onPressed: () {
-                          if (promptController.text.isNotEmpty && !isStreaming) {
-                            sendMessage(promptController.text);
-                            promptController.clear();
-                          }
-                        },
-                      ),
+                    onSubmitted: (value) => sendMessage(value),
+                    decoration: const InputDecoration(
+                      labelText: 'Enter your message...',
+                      border: OutlineInputBorder(),
                     ),
                   ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  color: Colors.blue,
+                  onPressed: () {
+                    sendMessage(promptController.text);
+                    promptController.clear();
+                  },
                 ),
               ],
             ),
