@@ -1,6 +1,6 @@
-import 'package:gardenapp/models/percentage.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:gardenapp/models/percentage.dart'; // Assurez-vous d'importer le modèle
 
 class CircleProgressChart extends StatefulWidget {
   const CircleProgressChart({super.key});
@@ -11,10 +11,11 @@ class CircleProgressChart extends StatefulWidget {
 
 class _CircleProgressChartState extends State<CircleProgressChart> {
   final List<Percentage> percentage = percentageList;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
+      height: 100, // Ajustez la hauteur selon vos besoins
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: percentage.length,
@@ -22,9 +23,9 @@ class _CircleProgressChartState extends State<CircleProgressChart> {
           final percentList = percentage[index];
           return Container(
             margin: const EdgeInsets.only(right: 10, bottom: 20),
-            width: 85,
+            width: 85, // Ajustez la largeur selon vos besoins
             decoration: BoxDecoration(
-              color:  Colors.white,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
@@ -36,10 +37,9 @@ class _CircleProgressChartState extends State<CircleProgressChart> {
               ],
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4),
                 CircularPercentIndicator(
                   radius: 25,
                   lineWidth: 5,
@@ -55,9 +55,7 @@ class _CircleProgressChartState extends State<CircleProgressChart> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4),
                 Text(
                   percentList.categories,
                   style: const TextStyle(
@@ -66,7 +64,7 @@ class _CircleProgressChartState extends State<CircleProgressChart> {
                   ),
                 ),
                 Text(
-                  "\$${percentList.price}",
+                  "\$${percentList.value}",
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 13,

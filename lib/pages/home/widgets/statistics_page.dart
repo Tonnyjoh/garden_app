@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gardenapp/pages/home/widgets/expense_graph.dart';
 import 'package:gardenapp/pages/home/widgets/expense_income.dart';
-import 'package:gardenapp/pages/home/widgets/progress_chart.dart';
 
 class StatisticsPage extends StatelessWidget {
   const StatisticsPage({super.key});
@@ -21,7 +20,7 @@ class StatisticsPage extends StatelessWidget {
             children: [
               Row(
                 children:  [
-                  ExpenseIncomeData(),
+                  DailySummaryData(),
                 ],
               ),
                SizedBox(height: 8),
@@ -33,6 +32,7 @@ class StatisticsPage extends StatelessWidget {
                   children: [
                     Text(
                       "Analytics",
+
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -40,12 +40,12 @@ class StatisticsPage extends StatelessWidget {
                     ),
                     SizedBox(
                       height:300, // 40% of screen height
-                      child: ExpenseGraphDesign(),
+                      child: GraphPageView(),
                     ),
-                    SizedBox(
+                    /*SizedBox(
                       height: 120, // 20% of screen height
                       child: CircleProgressChart(),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
