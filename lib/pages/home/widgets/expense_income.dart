@@ -110,8 +110,9 @@ class _DailySummaryDataState extends State<DailySummaryData> {
               Text(
                 summaryText,
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'CaviarDreams',
                   color: Colors.black.withOpacity(0.8),
                 ),
               ),
@@ -128,7 +129,7 @@ class _DailySummaryDataState extends State<DailySummaryData> {
                       Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 4),
                   Expanded(
                     child: summaryContainer(
                       context,
@@ -139,12 +140,12 @@ class _DailySummaryDataState extends State<DailySummaryData> {
                       const Color.fromRGBO(158, 235, 71, 1),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 4),
                   Expanded(
                     child: summaryContainer(
                       context,
                       Icons.water_drop,
-                      "Soil moisture",
+                      "Soil moist.",
                       averageLight,
                       const Color.fromRGBO(255, 223, 71, 1),
                       Colors.white,
@@ -171,6 +172,7 @@ class _DailySummaryDataState extends State<DailySummaryData> {
                         child: Text(
                           value,
                           style: const TextStyle(
+                            fontFamily: 'CaviarDreams',
                             color: Color.fromARGB(255, 31, 30, 30),
                           ),
                         ),
