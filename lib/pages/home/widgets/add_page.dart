@@ -153,7 +153,7 @@ class _AddPageState extends State<AddPage> {
 
       final plantInfo = {
         'name': jsonResponse['name'] ?? 'Unknown',
-        'variety': simplifyVariety(jsonResponse['variety']) ?? 'Unknown',
+        'variety': simplifyVariety(jsonResponse['variety']),
         'description': jsonResponse['description'] ?? 'Unknown',
         'temp_max': formatTemperature(jsonResponse['temp_max']),
         'temp_min': formatTemperature(jsonResponse['temp_min']),

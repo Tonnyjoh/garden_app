@@ -32,13 +32,13 @@ class _DailySummaryDataState extends State<DailySummaryData> {
         .select('*')
         .order('date_rel', ascending: false);
 
-    if (response.isNotEmpty) {
+    if (response == null) {
       setState(() {
         indicatorData = List<Map<String, dynamic>>.from(response);
         calculateAverages();
       });
     } else {
-      print('Error fetching data');
+      print('Error fetching data: ${response}');
     }
   }
 
@@ -74,7 +74,7 @@ class _DailySummaryDataState extends State<DailySummaryData> {
         summaryText = 'Summary'; // Texte par défaut
     }
 
-    /*print('Filtered Data: $filteredData');*/
+    print('Filtered Data: $filteredData');
 
     if (filteredData.isNotEmpty) {
       averageTemperature = filteredData
@@ -86,7 +86,7 @@ class _DailySummaryDataState extends State<DailySummaryData> {
           .reduce((a, b) => a + b) /
           filteredData.length;
       averageLight = filteredData
-          .map((data) => data["sol_moisture"])
+          .map((data) => data["soil_moisture"])
           .reduce((a, b) => a + b) /
           filteredData.length;
     } else {

@@ -1,17 +1,17 @@
-
 class Percentage {
   final String categories;
-  final int percent, price;
+  final int percent; // Pourcentage du niveau optimal atteint
+  final int value; // Valeur totale ou coût associé
 
   const Percentage({
     required this.categories,
     required this.percent,
-    required this.price,
+    required this.value,
   });
 }
 
 final percentageList = [
-  const Percentage(categories: "Restaurants", percent: 49, price: 1352),
-  const Percentage(categories: "Taxi", percent: 25, price: 452),
-  const Percentage(categories: "Media", percent: 18, price: 214),
+  const Percentage(categories: "Azote", percent: 70, value: 50),
+  const Percentage(categories: "Phosphore", percent: 85, value: 30),
+  const Percentage(categories: "Potassium", percent: 60, value: 40),
 ];
