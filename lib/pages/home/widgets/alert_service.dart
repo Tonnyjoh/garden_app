@@ -1,10 +1,13 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../models/alert.dart';
 
 class AlertService {
   final SupabaseClient client;
-
+  final userEmail = "rakotototo69@gmail.com";
   AlertService({required this.client});
 
   Stream<List<Alert>> getAlertsStream(int houseId) {
@@ -14,24 +17,11 @@ class AlertService {
         .eq('id_house', houseId)
         .order('date', ascending: false)
         .map((response) {
-     /* print("Raw data from Supabase: $response");*/
-
       final List<dynamic> data = response as List<dynamic>;
 
-/*      if (data.isEmpty) {
-        print("No alerts found.");
-      } else {
-        print("Data received: $data");
-      }*/
-
-      return data.map((alertData) {
-       /* print("Processing alert data: $alertData");*/
-
-        // Extract severity directly from alertData
+      final alerts = data.map((alertData) {
         final severityId = alertData['id_type'] as int?;
         final severityName = _mapSeverityName(severityId);
-
-       /* print("Alert type: $severityName, Mapped severity: $severityName");*/
 
         return Alert(
           title: alertData['message'] as String? ?? 'No title',
@@ -40,6 +30,11 @@ class AlertService {
           severity: _mapSeverity(severityName),
         );
       }).toList();
+      if (alerts.isNotEmpty) {
+        final latestAlert = alerts.first;
+        _sendAlertEmail(latestAlert);
+      }
+      return alerts;
     });
   }
 
@@ -72,6 +67,40 @@ class AlertService {
         return Severity.minor;
       default:
         return Severity.minor;
+    }
+  }
+
+  void _sendAlertEmail(Alert alert) async {
+    await dotenv.load();
+    final username = dotenv.env['MAIL'];
+    final password = dotenv.env['PASSWORD'];
+
+    if (username == null || password == null) {
+      print('Error: Missing environment variables for email or password.');
+      return;
+    }
+
+    final smtpServer = gmail(username, password);
+    final message = Message()
+      ..from = Address(username, 'Garden App')
+      ..recipients.add(userEmail)
+      ..subject = 'New Alert: ${alert.severity} - ${alert.title} - ${DateTime.now()}'
+      ..text = 'You have a new alert:\n\n'
+          'Title: ${alert.title}\n'
+          'Description: ${alert.description}\n'
+          'Time: ${alert.time}\n'
+          'Severity: ${alert.severity.toString().split('.').last}\n';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: $sendReport');
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    } catch (e) {
+      print('An unexpected error occurred: $e');
     }
   }
 }
