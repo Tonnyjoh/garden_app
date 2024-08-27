@@ -25,7 +25,7 @@ class _AddPageState extends State<AddPage> {
   void initState() {
     super.initState();
     model = GenerativeModel(
-      model: 'gemini-1.5-pro',
+      model: 'gemini-1.5-flash',
       apiKey: 'AIzaSyDP05oAHevBU4iWKt5DZiMrM6nIhmcdyq4',
       generationConfig: generationConfig,
     );
@@ -97,7 +97,9 @@ class _AddPageState extends State<AddPage> {
           responseText = formatResponseAsJson(accumulatedResponse);
           try {
             final plantData = jsonDecode(responseText) as Map<String, dynamic>;
-            await insertPlantData(plantData);
+            if(plantData["name"] != "Unknown"){
+              await insertPlantData(plantData);
+            }
           } catch (e) {
             print('Erreur lors de l\'insertion des données de la plante: $e');
           }

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../models/alert.dart';
+import 'package:gardenapp/models/alert.dart';
 
 class AlertService {
   final SupabaseClient client;
@@ -28,8 +28,11 @@ class AlertService {
           description: alertData['message'] as String? ?? 'No description',
           time: _formatDate(alertData['date'] as String? ?? '1970-01-01T00:00:00Z'),
           severity: _mapSeverity(severityName),
+          id: alertData['id_alert'] as int,
+          emailSent: alertData['email_sent'] as bool? ?? false,
         );
       }).toList();
+
       if (alerts.isNotEmpty) {
         final latestAlert = alerts.first;
         _sendAlertEmail(latestAlert);
@@ -71,45 +74,47 @@ class AlertService {
   }
 
   void _sendAlertEmail(Alert alert) async {
-    // Vérification si la date de l'alerte est aujourd'hui
-    final DateTime alertDate = DateFormat('dd MMM yyyy, HH:mm').parse(alert.time);
-    final DateTime today = DateTime.now();
+    // Vérifier si l'email a déjà été envoyé pour cette alerte
+    if (alert.emailSent) {
+      print('Email already sent for this alert. No email sent.');
+      return;
+    }
 
-    if (alertDate.year == today.year && alertDate.month == today.month && alertDate.day == today.day) {
-      await dotenv.load();
-      final username = dotenv.env['MAIL'];
-      final password = dotenv.env['PASSWORD'];
+    await dotenv.load();
+    final username = dotenv.env['MAIL'];
+    final password = dotenv.env['PASSWORD'];
 
-      if (username == null || password == null) {
-        print('Error: Missing environment variables for email or password.');
-        return;
+    if (username == null || password == null) {
+      print('Error: Missing environment variables for email or password.');
+      return;
+    }
+
+    final smtpServer = gmail(username, password);
+    final message = Message()
+      ..from = Address(username, 'Garden App')
+      ..recipients.add(userEmail)
+      ..subject = 'New Alert: ${alert.severity} - ${alert.title} - ${DateTime.now()}'
+      ..text = 'You have a new alert:\n\n'
+          'Title: ${alert.title}\n'
+          'Description: ${alert.description}\n'
+          'Time: ${alert.time}\n'
+          'Severity: ${alert.severity.toString().split('.').last}\n';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: $sendReport');
+
+      await client
+          .from('alerts')
+          .update({'email_sent': true})
+          .eq('id_alert', alert.id);
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
       }
-
-      final smtpServer = gmail(username, password);
-      final message = Message()
-        ..from = Address(username, 'Garden App')
-        ..recipients.add(userEmail)
-        ..subject = 'New Alert: ${alert.severity} - ${alert.title} - ${DateTime.now()}'
-        ..text = 'You have a new alert:\n\n'
-            'Title: ${alert.title}\n'
-            'Description: ${alert.description}\n'
-            'Time: ${alert.time}\n'
-            'Severity: ${alert.severity.toString().split('.').last}\n';
-
-      try {
-        final sendReport = await send(message, smtpServer);
-        print('Message sent: $sendReport');
-      } on MailerException catch (e) {
-        print('Message not sent.');
-        for (var p in e.problems) {
-          print('Problem: ${p.code}: ${p.msg}');
-        }
-      } catch (e) {
-        print('An unexpected error occurred: $e');
-      }
-    } else {
-      print('Alert date is not today. No email sent.');
+    } catch (e) {
+      print('An unexpected error occurred: $e');
     }
   }
-
 }
