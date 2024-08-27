@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gardenapp/pages/home/widgets/profile_screen.dart';
+import 'package:gardenapp/pages/home/home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (event == AuthChangeEvent.signedIn) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const ProfileScreen(),
+            builder: (context) => const HomePage(),
           ),
         );
       }
@@ -54,19 +54,55 @@ class _LoginScreenState extends State<LoginScreen> {
       idToken: idToken,
       accessToken: accessToken,
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      backgroundColor: Colors.white,
       body: Center(
-        child: ElevatedButton(
-          onPressed: _googleSignIn,
-          child: const Text('Google login'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.grey[300]!, width: 1),
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/gardenapp.png',
+                  width: 300,
+                  height: 300,
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              onPressed: _googleSignIn,
+              icon: Image.asset(
+                'assets/images/google.png',
+                width: 24,
+                height: 24,
+              ),
+              label: const Text(
+                'Sign in with Google',
+                style: TextStyle(color: Colors.black87, fontSize: 16),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                minimumSize: const Size(220, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  side: BorderSide(color: Colors.grey[300]!),
+                ),
+                elevation: 0,
+              ),
+            ),
+          ],
         ),
       ),
     );

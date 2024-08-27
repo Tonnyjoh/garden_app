@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gardenapp/pages/home/login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../login.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -11,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
     final user = Supabase.instance.client.auth.currentUser;
     final profileImageUrl = user?.userMetadata?['avatar_url'];
     final fullName = user?.userMetadata?['full_name'];
+    final email = user?.userMetadata?['email'];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
