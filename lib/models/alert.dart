@@ -11,10 +11,14 @@ class Alert {
 
   final Severity severity;
 
+  final bool emailSent;
+  final int id;
   Alert({
     required this.title,
     required this.description,
     required this.time,
+    required this.emailSent,
+    required this.id,
     this.severity = Severity.minor,
   });
 
