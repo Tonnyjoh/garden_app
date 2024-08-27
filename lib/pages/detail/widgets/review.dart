@@ -12,7 +12,8 @@ class ReviewSection extends StatelessWidget {
     double tempMin = plant.plantIndicators.first.tempMin;
     double tempMax = plant.plantIndicators.first.tempMax;
 
-    int filledDrops = waterNeed as int;
+    // Convertir 'waterNeed' en int (arrondir ou tronquer)
+    int filledDrops = waterNeed.round();
     int totalDrops = 5;
 
     return Container(
@@ -86,46 +87,14 @@ class ReviewSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          const Text(
+          /*const Text(
             'Notifications',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
           ),
-          const SizedBox(height: 10),
-          /*Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: plant.notifications.map((notification) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.notifications,
-                        color: Colors.green,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        notification,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
-          ),*/
+          const SizedBox(height: 10),*/
         ],
       ),
     );

@@ -71,36 +71,45 @@ class AlertService {
   }
 
   void _sendAlertEmail(Alert alert) async {
-    await dotenv.load();
-    final username = dotenv.env['MAIL'];
-    final password = dotenv.env['PASSWORD'];
+    // Vérification si la date de l'alerte est aujourd'hui
+    final DateTime alertDate = DateFormat('dd MMM yyyy, HH:mm').parse(alert.time);
+    final DateTime today = DateTime.now();
 
-    if (username == null || password == null) {
-      print('Error: Missing environment variables for email or password.');
-      return;
-    }
+    if (alertDate.year == today.year && alertDate.month == today.month && alertDate.day == today.day) {
+      await dotenv.load();
+      final username = dotenv.env['MAIL'];
+      final password = dotenv.env['PASSWORD'];
 
-    final smtpServer = gmail(username, password);
-    final message = Message()
-      ..from = Address(username, 'Garden App')
-      ..recipients.add(userEmail)
-      ..subject = 'New Alert: ${alert.severity} - ${alert.title} - ${DateTime.now()}'
-      ..text = 'You have a new alert:\n\n'
-          'Title: ${alert.title}\n'
-          'Description: ${alert.description}\n'
-          'Time: ${alert.time}\n'
-          'Severity: ${alert.severity.toString().split('.').last}\n';
-
-    try {
-      final sendReport = await send(message, smtpServer);
-      print('Message sent: $sendReport');
-    } on MailerException catch (e) {
-      print('Message not sent.');
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
+      if (username == null || password == null) {
+        print('Error: Missing environment variables for email or password.');
+        return;
       }
-    } catch (e) {
-      print('An unexpected error occurred: $e');
+
+      final smtpServer = gmail(username, password);
+      final message = Message()
+        ..from = Address(username, 'Garden App')
+        ..recipients.add(userEmail)
+        ..subject = 'New Alert: ${alert.severity} - ${alert.title} - ${DateTime.now()}'
+        ..text = 'You have a new alert:\n\n'
+            'Title: ${alert.title}\n'
+            'Description: ${alert.description}\n'
+            'Time: ${alert.time}\n'
+            'Severity: ${alert.severity.toString().split('.').last}\n';
+
+      try {
+        final sendReport = await send(message, smtpServer);
+        print('Message sent: $sendReport');
+      } on MailerException catch (e) {
+        print('Message not sent.');
+        for (var p in e.problems) {
+          print('Problem: ${p.code}: ${p.msg}');
+        }
+      } catch (e) {
+        print('An unexpected error occurred: $e');
+      }
+    } else {
+      print('Alert date is not today. No email sent.');
     }
   }
+
 }
