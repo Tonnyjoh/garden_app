@@ -35,16 +35,18 @@ class _LoginScreenState extends State<LoginScreen> {
     const webClientId = '207016557328-g4go4j1oeoo49cegu6n8bhovbr5qnv3n.apps.googleusercontent.com';
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: kIsWeb ? webClientId : null,
+      serverClientId: webClientId,
     );
-
     final googleUser = await googleSignIn.signIn();
     final googleAuth = await googleUser!.authentication;
     final accessToken = googleAuth.accessToken;
     final idToken = googleAuth.idToken;
 
-    if (accessToken == null || idToken == null) {
-      throw 'AccessToken ou ID Token manquant.';
+    if (accessToken == null) {
+      throw 'No Access Token found.';
+    }
+    if (idToken == null) {
+      throw 'No ID Token found.';
     }
 
     return Supabase.instance.client.auth.signInWithIdToken(
@@ -52,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
       idToken: idToken,
       accessToken: accessToken,
     );
+
   }
 
   @override
