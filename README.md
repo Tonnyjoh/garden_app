@@ -1,6 +1,6 @@
 # gardenapp
 
-Une application mobile pour suivre l'évolution de ma plante, connectée à une serre autonomne.
+Une application mobile pour suivre l'évolution de ma plante, connectée à une serre autonome.
 
 ## Getting Started
 
