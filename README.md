@@ -24,20 +24,22 @@ Une application mobile pour suivre l'évolution de ma plante, connectée à une 
 
 Voici quelques captures d'écran de l'application :
 
+## Galerie
+
 ### Capture d'écran 1
-![Capture d'écran 1](/assets/images/1.jpg)
+<img src="/assets/images/1.jpg" alt="Capture d'écran 1" width="300"/>
 
 ### Capture d'écran 2
-![Capture d'écran 2](/assets/images/2.jpg)
+<img src="/assets/images/2.jpg" alt="Capture d'écran 2" width="300"/>
 
 ### Capture d'écran 3
-![Capture d'écran 3](/assets/images/3.jpg)
+<img src="/assets/images/3.jpg" alt="Capture d'écran 3" width="300"/>
 
 ### Capture d'écran 4
-![Capture d'écran 4](/assets/images/4.jpg)
+<img src="/assets/images/4.jpg" alt="Capture d'écran 4" width="300"/>
 
 ### Capture d'écran 5
-![Capture d'écran 5](/assets/images/5.jpg)
+<img src="/assets/images/5.jpg" alt="Capture d'écran 5" width="300"/>
 
 *Chaque image représente une partie différente de l'application.*
 
