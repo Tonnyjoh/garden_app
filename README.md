@@ -20,6 +20,26 @@ Une application mobile pour suivre l'évolution de ma plante, connectée à une 
 - Fonctionnalité 2 : Suivie de l'évolution des conditions dans la serre et auto ajustement de la serre.
 - Fonctionnalité 3 : Envoie de mail à l'utilisateur en cas de problème.
 
+## Galerie
+
+Voici quelques captures d'écran de l'application :
+
+### Capture d'écran 1
+![Capture d'écran 1](/assets/images/1.jpg)
+
+### Capture d'écran 2
+![Capture d'écran 2](/assets/images/2.jpg)
+
+### Capture d'écran 3
+![Capture d'écran 3](/assets/images/3.jpg)
+
+### Capture d'écran 4
+![Capture d'écran 4](/assets/images/4.jpg)
+
+### Capture d'écran 5
+![Capture d'écran 5](/assets/images/5.jpg)
+
+*Chaque image représente une partie différente de l'application.*
 
 ## Getting Started
 
