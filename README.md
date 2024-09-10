@@ -1,6 +1,6 @@
 # gardenapp
 
-A new Flutter project.
+Une application mobile pour suivre l'évolution de ma plante, connectée à une serre autonome.
 
 ## Getting Started
 
