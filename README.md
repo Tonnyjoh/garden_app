@@ -2,6 +2,26 @@
 
 Une application mobile pour suivre l'évolution de ma plante, connectée à une serre autonome.
 
+## Table des Matières
+
+- [À propos](#à-propos)
+- [Fonctionnalités](#fonctionnalités)
+- [Utilisation](#utilisation)
+- [Contribuer](#contribuer)
+- [Licence](#licence)
+- [Contact](#contact)
+
+## À propos
+
+Expliquez ici pourquoi vous avez créé ce projet, ce qu'il fait et comment il est utile.
+
+## Fonctionnalités
+
+- Fonctionnalité 1 : Description de la fonctionnalité 1.
+- Fonctionnalité 2 : Description de la fonctionnalité 2.
+- Fonctionnalité 3 : Description de la fonctionnalité 3.
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
