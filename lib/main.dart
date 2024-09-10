@@ -4,6 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gardenapp/pages/home/home.dart';
+import 'package:gardenapp/pages/home/login.dart';
+import 'package:gardenapp/pages/home/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -21,7 +24,12 @@ void main() async {
   // Check connectivity
   List<ConnectivityResult> connectivityResult = await Connectivity().checkConnectivity();
 
-  runApp(MyApp(connectivityResult: connectivityResult));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MyApp(connectivityResult: connectivityResult),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -66,7 +74,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Garden App',
       home: _connectivityResult.contains(ConnectivityResult.none)
           ? const NoConnectionScreen()
-          : const HomePage(),
+          : const LoginScreen(),
     );
   }
 }
@@ -92,7 +100,12 @@ class NoConnectionScreen extends StatelessWidget {
               onPressed: () async {
                 List<ConnectivityResult> connectivityResult = await Connectivity().checkConnectivity();
                 if (!connectivityResult.contains(ConnectivityResult.none)) {
-                  runApp(MyApp(connectivityResult: connectivityResult));
+                  runApp(
+                    ChangeNotifierProvider(
+                      create: (context) => UserProvider(),
+                      child: MyApp(connectivityResult: connectivityResult),
+                    ),
+                  );
                 }
               },
               child: const Text('Retry'),

@@ -7,8 +7,8 @@ import 'package:gardenapp/models/alert.dart';
 
 class AlertService {
   final SupabaseClient client;
-  final userEmail = "rakotototo69@gmail.com";
-  AlertService({required this.client});
+  final String? userEmail;
+  AlertService({required this.client, this.userEmail});
 
   Stream<List<Alert>> getAlertsStream(int houseId) {
     return client

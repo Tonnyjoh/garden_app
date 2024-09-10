@@ -34,7 +34,7 @@ class MenuSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              MyPlants(),
+              const MyPlants(),
               const SizedBox(height: 10),
               const Text(
                 'Explore',

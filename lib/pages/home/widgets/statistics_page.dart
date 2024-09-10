@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gardenapp/pages/home/user_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:gardenapp/pages/home/widgets/alert_part.dart';
 import 'package:gardenapp/pages/home/widgets/expense_graph.dart';
 import 'package:gardenapp/pages/home/widgets/expense_income.dart';
-
+import 'package:provider/provider.dart';
 import 'alert_service.dart';
 
 class StatisticsPage extends StatelessWidget {
@@ -12,7 +13,9 @@ class StatisticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SupabaseClient client = Supabase.instance.client;
-    final AlertService alertService = AlertService(client: client);
+    final userProvider = Provider.of<UserProvider>(context);
+    final userEmail = userProvider.email;
+    final AlertService alertService = AlertService(client: client, userEmail: userEmail);
 
     return Scaffold(
       appBar: AppBar(

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gardenapp/pages/home/widgets/profile_screen.dart';
+import 'package:gardenapp/pages/home/home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (event == AuthChangeEvent.signedIn) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const ProfileScreen(),
+            builder: (context) => const HomePage(),
           ),
         );
       }
@@ -35,16 +35,18 @@ class _LoginScreenState extends State<LoginScreen> {
     const webClientId = '207016557328-g4go4j1oeoo49cegu6n8bhovbr5qnv3n.apps.googleusercontent.com';
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: kIsWeb ? webClientId : null,
+      serverClientId: webClientId,
     );
-
     final googleUser = await googleSignIn.signIn();
     final googleAuth = await googleUser!.authentication;
     final accessToken = googleAuth.accessToken;
     final idToken = googleAuth.idToken;
 
-    if (accessToken == null || idToken == null) {
-      throw 'AccessToken ou ID Token manquant.';
+    if (accessToken == null) {
+      throw 'No Access Token found.';
+    }
+    if (idToken == null) {
+      throw 'No ID Token found.';
     }
 
     return Supabase.instance.client.auth.signInWithIdToken(
@@ -57,13 +59,50 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      backgroundColor: Colors.white,
       body: Center(
-        child: ElevatedButton(
-          onPressed: _googleSignIn,
-          child: const Text('Google login'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.grey[300]!, width: 1),
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/gardenapp.png',
+                  width: 300,
+                  height: 300,
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              onPressed: _googleSignIn,
+              icon: Image.asset(
+                'assets/images/google.png',
+                width: 24,
+                height: 24,
+              ),
+              label: const Text(
+                'Sign in with Google',
+                style: TextStyle(color: Colors.black87, fontSize: 16),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                minimumSize: const Size(220, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  side: BorderSide(color: Colors.grey[300]!),
+                ),
+                elevation: 0,
+              ),
+            ),
+          ],
         ),
       ),
     );

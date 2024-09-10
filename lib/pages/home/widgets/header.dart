@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gardenapp/pages/home/widgets/settings.dart';
 import 'package:intl/intl.dart';
 
 class HeaderSection extends StatelessWidget {
@@ -22,18 +23,18 @@ class HeaderSection extends StatelessWidget {
             children: [
               Text(
                 formattedDate,
-                style:const TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                   fontFamily: 'CaviarDreams',
                 ),
               ),
-              const SizedBox(height: 5,),
+              const SizedBox(height: 5),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    Text(
+                  Text(
                     "My plant,",
                     style: TextStyle(
                       fontSize: 23,
@@ -42,7 +43,6 @@ class HeaderSection extends StatelessWidget {
                       fontFamily: 'CaviarDreams',
                     ),
                   ),
-
                   Text(
                     "how are you today?",
                     style: TextStyle(
@@ -54,17 +54,37 @@ class HeaderSection extends StatelessWidget {
                   ),
                 ],
               ),
-
             ],
           ),
-          CircleAvatar(
-            child: Image.asset(
-              'assets/images/logo_ispm.png',
-              fit: BoxFit.cover,
-            ),
-          )
+          Row(
+            children: [
+              CircleAvatar(
+                child: Image.asset(
+                  'assets/images/logo_ispm.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  );
+                },
+              ),
+            ],
+
+          ),
         ],
       ),
     );
   }
 }
+
+
