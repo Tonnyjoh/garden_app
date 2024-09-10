@@ -1,6 +1,5 @@
 # gardenapp
-
-Une application mobile pour suivre l'évolution de ma plante, connectée à une serre autonome.
+Flutter and Supabase + Esp + Arduino
 
 ## Table des Matières
 
@@ -13,13 +12,13 @@ Une application mobile pour suivre l'évolution de ma plante, connectée à une 
 
 ## À propos
 
-Expliquez ici pourquoi vous avez créé ce projet, ce qu'il fait et comment il est utile.
+Une application mobile pour suivre l'évolution de ma plante, connectée à une serre autonome.
 
 ## Fonctionnalités
 
-- Fonctionnalité 1 : Description de la fonctionnalité 1.
-- Fonctionnalité 2 : Description de la fonctionnalité 2.
-- Fonctionnalité 3 : Description de la fonctionnalité 3.
+- Fonctionnalité 1 : Ajout de nouvelle plante dans la serre, chat with bot.
+- Fonctionnalité 2 : Suivie de l'évolution des conditions dans la serre et auto ajustement de la serre.
+- Fonctionnalité 3 : Envoie de mail à l'utilisateur en cas de problème.
 
 
 ## Getting Started
