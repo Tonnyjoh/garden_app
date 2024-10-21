@@ -26,7 +26,7 @@ class _AddPageState extends State<AddPage> {
     super.initState();
     model = GenerativeModel(
       model: 'gemini-1.5-flash',
-      apiKey: 'AIzaSyDP05oAHevBU4iWKt5DZiMrM6nIhmcdyq4',
+      apiKey: 'API_KEY_FOR_GEMINI',
       generationConfig: generationConfig,
     );
     // Add a welcome message
